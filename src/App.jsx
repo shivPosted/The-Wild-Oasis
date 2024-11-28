@@ -1,9 +1,17 @@
 import styled, { css } from "styled-components";
-import GlobalStyles from "./styles/globalStyles";
-import Button from "./ui/Button";
-import Input from "./ui/Input";
-import Heading from "./ui/Heading";
-import Row from "./ui/Row";
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from "react-router-dom";
+import Dashboard from "./pages/Dashboard";
+import AppLayout from "./ui/AppLayout";
+import Account from "./pages/Account";
+import Settings from "./pages/Settings";
+import Cabins from "./pages/Cabins";
+import Bookings from "./pages/Bookings";
+import PageNotFound from "./pages/PageNotFound";
+import Login from "./pages/Login";
 
 //NOTE: using StyledApp to apply styles to main element of App component
 const StyledApp = styled.main`
@@ -12,36 +20,48 @@ const StyledApp = styled.main`
   margin: 0 auto;
 `;
 
+const router = createBrowserRouter([
+  {
+    element: <AppLayout />,
+    path: "/",
+    children: [
+      {
+        index: true,
+        element: <Navigate to="dashboard" replace={true} />,
+      },
+      {
+        element: <Dashboard />,
+        path: "dashboard",
+      },
+      {
+        element: <Account />,
+        path: "account",
+      },
+      {
+        element: <Settings />,
+        path: "settings",
+      },
+      {
+        element: <Cabins />,
+        path: "cabins",
+      },
+      {
+        element: <Bookings />,
+        path: "bookings",
+      },
+    ],
+  },
+  {
+    element: <PageNotFound />,
+    path: "*",
+  },
+  {
+    element: <Login />,
+    path: "login",
+  },
+]);
+
 function App() {
-  return (
-    <>
-      <GlobalStyles />
-      <StyledApp>
-        <Row alignment="vertical">
-          <Row>
-            <Heading as="h1">The Wild Oasis</Heading>
-            <div>
-              <Heading as="h2">Check In and Check Out</Heading>
-              <Button onClick={() => console.log("check in")}>
-                Check In
-              </Button>{" "}
-              {/* by default the type is primary and size is small for button */}
-              <Button
-                size="small"
-                variation="secondary"
-                onClick={() => console.log("check out")}
-              >
-                Check Out
-              </Button>
-            </div>
-          </Row>
-          <form>
-            <Heading as="h3">Form</Heading>
-            <Input type="text" placeholder="Number of Guests" />
-          </form>
-        </Row>
-      </StyledApp>
-    </>
-  );
+  return <RouterProvider router={router} />;
 }
 export default App;
