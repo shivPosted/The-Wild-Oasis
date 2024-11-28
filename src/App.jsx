@@ -12,6 +12,7 @@ import Cabins from "./pages/Cabins";
 import Bookings from "./pages/Bookings";
 import PageNotFound from "./pages/PageNotFound";
 import Login from "./pages/Login";
+import GlobalStyles from "./styles/globalStyles";
 
 //NOTE: using StyledApp to apply styles to main element of App component
 const StyledApp = styled.main`
@@ -27,7 +28,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Navigate to="dashboard" replace={true} />,
+        element: <Navigate to="dashboard" replace />,
       },
       {
         element: <Dashboard />,
@@ -62,6 +63,11 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <>
+      <GlobalStyles />
+      <RouterProvider router={router} />
+    </>
+  );
 }
 export default App;
