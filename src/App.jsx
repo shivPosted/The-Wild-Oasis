@@ -14,6 +14,8 @@ import PageNotFound from "./pages/PageNotFound";
 import Login from "./pages/Login";
 import GlobalStyles from "./styles/globalStyles";
 import Users from "./pages/Users";
+import supabase from "./services/supabase";
+import { useEffect } from "react";
 
 //NOTE: using StyledApp to apply styles to main element of App component
 const StyledApp = styled.main`
