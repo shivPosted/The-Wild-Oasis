@@ -1,4 +1,8 @@
 import styled, { css } from "styled-components";
+
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+
 import {
   createBrowserRouter,
   Navigate,
@@ -14,8 +18,6 @@ import PageNotFound from "./pages/PageNotFound";
 import Login from "./pages/Login";
 import GlobalStyles from "./styles/globalStyles";
 import Users from "./pages/Users";
-import supabase from "./services/supabase";
-import { useEffect } from "react";
 
 //NOTE: using StyledApp to apply styles to main element of App component
 const StyledApp = styled.main`
@@ -23,6 +25,14 @@ const StyledApp = styled.main`
   max-width: 60%;
   margin: 0 auto;
 `;
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 90 * 1000, //NOTE: the time after which data will be refetched
+    },
+  },
+});
 
 const router = createBrowserRouter([
   {
@@ -71,10 +81,11 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    <>
+    <QueryClientProvider client={queryClient}>
+      <ReactQueryDevtools />
       <GlobalStyles />
       <RouterProvider router={router} />
-    </>
+    </QueryClientProvider>
   );
 }
 export default App;

@@ -5,7 +5,7 @@ function Settings() {
   return (
     <>
       <Row alignment="horizontal">
-        <Heading as="h1">Dashboard</Heading>
+        <Heading as="h1">Settings</Heading>
         <p>test</p>
       </Row>
     </>

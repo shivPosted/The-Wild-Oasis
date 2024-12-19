@@ -16,6 +16,7 @@ const Navlist = styled.ul`
   margin-top: 3.2rem;
 `;
 
+//NOTE: 👇 styling Navlink component from react-router using styled() function of styledcomponent
 const StyledNavLink = styled(NavLink)`
   &:link,
   &:visited {
