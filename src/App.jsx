@@ -29,7 +29,7 @@ const StyledApp = styled.main`
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 90 * 1000, //NOTE: the time after which data will be refetched
+      staleTime: 0, //NOTE: time it takes for the data to become stale
     },
   },
 });
