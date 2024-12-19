@@ -11,4 +11,16 @@ async function getCabins() {
   }
 }
 
-export { getCabins };
+async function deleteCabin(id) {
+  console.log(id);
+  const { data, error } = await supabase
+    .from("the_oasis_cabins")
+    .delete()
+    .eq("id", id)
+    .select("*");
+  if (error) throw error;
+
+  return data;
+}
+
+export { getCabins, deleteCabin };
