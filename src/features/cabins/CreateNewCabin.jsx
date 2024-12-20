@@ -6,6 +6,9 @@ import Textarea from "../../ui/TextArea";
 import FileInput from "../../ui/FileInput";
 import Button from "../../ui/Button";
 import { useForm } from "react-hook-form";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { createCabin } from "../../services/apiCabins";
+import toast from "react-hot-toast";
 
 const StyledFormRow = styled.div`
   display: grid;
@@ -43,11 +46,27 @@ const Error = styled.span`
   color: var(--color-red-700);
 `;
 function CreateNewCabin() {
-  const { handleSubmit, register } = useForm();
+  const { handleSubmit, register, reset } = useForm();
+  const queryClient = useQueryClient();
+
+  const { mutate, isLoading: isCreating } = useMutation({
+    mutationFn: (newCabin) => createCabin(newCabin),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["cabins"],
+      });
+
+      toast.success("Cabin added successfully");
+      reset(); //NOTE: reset function of the form hook
+    },
+
+    onError: (err) => toast.error(err.message),
+  });
 
   function onSubmit(data) {
-    console.log(data);
+    mutate(data);
   }
+
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
       <StyledFormRow>
@@ -59,13 +78,18 @@ function CreateNewCabin() {
         <Input
           id="capacity"
           type="number"
-          name="capacity"
-          {...register("capacity")}
+          name="maxCapacity"
+          {...register("maxCapacity")}
         />
       </StyledFormRow>
       <StyledFormRow>
         <Label htmlFor="price">Regular Price</Label>
-        <Input id="price" type="number" name="price" {...register("price")} />
+        <Input
+          id="price"
+          type="number"
+          name="regularPrice"
+          {...register("regularPrice")}
+        />
       </StyledFormRow>
       <StyledFormRow>
         <Label htmlFor="discount">Discount</Label>
@@ -86,17 +110,13 @@ function CreateNewCabin() {
       </StyledFormRow>
       <StyledFormRow>
         <Label htmlFor="file-input">Image for Cabin</Label>
-        <FileInput
-          id="file-input"
-          name="imageInput"
-          {...register("fileInput")}
-        />
+        <FileInput id="file-input" name="image" {...register("image")} />
       </StyledFormRow>
       <StyledFormRow>
         <Button variation="secondary" type="reset">
           Cancel
         </Button>
-        <Button>Add Cabin</Button>
+        <Button disabled={isCreating}>Add Cabin</Button>
       </StyledFormRow>
     </Form>
   );
