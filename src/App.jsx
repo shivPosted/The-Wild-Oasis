@@ -18,6 +18,7 @@ import PageNotFound from "./pages/PageNotFound";
 import Login from "./pages/Login";
 import GlobalStyles from "./styles/globalStyles";
 import Users from "./pages/Users";
+import { Toaster } from "react-hot-toast";
 
 //NOTE: using StyledApp to apply styles to main element of App component
 const StyledApp = styled.main`
@@ -85,6 +86,25 @@ function App() {
       <ReactQueryDevtools />
       <GlobalStyles />
       <RouterProvider router={router} />
+      <Toaster //NOTE: toast component imported from third pary lib
+        gutter={16}
+        position="top-center"
+        toastOptions={{
+          success: {
+            duration: 3000,
+          },
+          error: {
+            duration: 5000,
+          },
+          style: {
+            fontSize: "16px",
+            maxWidth: "400px",
+            padding: "16px 24px",
+            color: "var(--color-grey-700)",
+            backgroundColor: "var(--color--brand)",
+          },
+        }}
+      />
     </QueryClientProvider>
   );
 }

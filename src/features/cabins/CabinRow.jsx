@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { formatCurrency } from "../../utils";
 import { deleteCabin } from "../../services/apiCabins";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
 const TableRow = styled.div`
   display: grid;
@@ -45,14 +46,20 @@ const Discount = styled.div`
 function CabinRow({ cabin }) {
   const { id, name, image, maxCapacity, regularPrice, discount } = cabin;
 
-  const queryClient = useQueryClient();
-
+  const queryClient = useQueryClient(); //NOTE: used for getting the query client
   const { isLoading: isDeleting, mutate } = useMutation({
     mutationFn: deleteCabin,
-    onSuccess: () =>
+    onSuccess: () => {
+      //NOTE: invalidateQueries is used to invalidate the present query data that forces react query to fetch the data again , helps when you want to refetch the data
       queryClient.invalidateQueries({
         queryKey: ["cabins"],
-      }),
+      });
+      toast.success("Cabin successfully deleted");
+    },
+    onError: (err) => {
+      //NOTE: get accesss to err param that is returned if there is an error ny mutationFn
+      toast.error(err.message);
+    },
   });
 
   return (

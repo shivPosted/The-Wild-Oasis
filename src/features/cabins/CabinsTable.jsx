@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
-import { getCabins } from "../../services/apiCabins";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { deleteCabin, getCabins } from "../../services/apiCabins";
 import styled from "styled-components";
 import Spinner from "../../ui/Spinner";
 import CabinRow from "./CabinRow";
@@ -49,7 +49,7 @@ function CabinsTable() {
         <div>discout</div>
         <div>delete</div>
       </TableHeader>
-      {cabins.map((cabin) => (
+      {cabins?.map((cabin) => (
         <CabinRow key={cabin.id} cabin={cabin} />
       ))}
     </Table>
