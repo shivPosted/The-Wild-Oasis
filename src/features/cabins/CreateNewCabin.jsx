@@ -2,6 +2,9 @@ import { useState } from "react";
 import Form from "../../ui/Form";
 import Input from "../../ui/Input";
 import styled from "styled-components";
+import Textarea from "../../ui/TextArea";
+import FileInput from "../../ui/FileInput";
+import Button from "../../ui/Button";
 
 const StyledFormRow = styled.div`
   display: grid;
@@ -43,7 +46,33 @@ function CreateNewCabin() {
     <Form>
       <StyledFormRow>
         <Label for="name">Cabin Name</Label>
-        <Input id="name" type="text" />
+        <Input id="name" type="text" name="name" />
+      </StyledFormRow>
+      <StyledFormRow>
+        <Label for="capacity">Max Capacity</Label>
+        <Input id="capacity" type="number" name="capacity" />
+      </StyledFormRow>
+      <StyledFormRow>
+        <Label for="price">Regular Price</Label>
+        <Input id="price" type="number" name="price" />
+      </StyledFormRow>
+      <StyledFormRow>
+        <Label for="discount">Discount</Label>
+        <Input id="discount" type="text" name="discount" />
+      </StyledFormRow>
+      <StyledFormRow>
+        <Label for="description">Description for Cabin</Label>
+        <Textarea id="description" name="description" />
+      </StyledFormRow>
+      <StyledFormRow>
+        <Label for="file-input">Image for Cabin</Label>
+        <FileInput id="file-input" name="imageInput" />
+      </StyledFormRow>
+      <StyledFormRow>
+        <Button variation="secondary" type="reset">
+          Cancel
+        </Button>
+        <Button>Edit Cabin</Button>
       </StyledFormRow>
     </Form>
   );
