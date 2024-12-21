@@ -1,52 +1,17 @@
-import { useState } from "react";
 import Form from "../../ui/Form";
 import Input from "../../ui/Input";
-import styled from "styled-components";
 import Textarea from "../../ui/TextArea";
 import FileInput from "../../ui/FileInput";
 import Button from "../../ui/Button";
 import { useForm } from "react-hook-form";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createCabin } from "../../services/apiCabins";
 import toast from "react-hot-toast";
+import FormRow from "../../ui/FormRow";
 
-const StyledFormRow = styled.div`
-  display: grid;
-  align-items: center;
-  grid-template-columns: 24rem 1fr 1.2fr;
-  gap: 2.4rem;
-
-  padding: 1.2rem 0;
-
-  &:first-child {
-    padding-top: 0;
-  }
-
-  &:last-child {
-    padding-bottom: 0;
-  }
-
-  &:not(:last-child) {
-    border-bottom: 1px solid var(--color-grey-100);
-  }
-
-  &:has(button) {
-    display: flex;
-    justify-content: flex-end;
-    gap: 1.2rem;
-  }
-`;
-
-const Label = styled.label`
-  font-weight: 500;
-`;
-
-const Error = styled.span`
-  font-size: 1.4rem;
-  color: var(--color-red-700);
-`;
 function CreateNewCabin() {
-  const { handleSubmit, register, reset } = useForm();
+  const { handleSubmit, register, reset, getValues, formState } = useForm();
+  const { errors } = formState;
   const queryClient = useQueryClient();
 
   const { mutate, isLoading: isCreating } = useMutation({
@@ -63,61 +28,97 @@ function CreateNewCabin() {
     onError: (err) => toast.error(err.message),
   });
 
-  function onSubmit(data) {
+  function onValid(data) {
+    //NOTE: onValid get access to data which is automatically passed by handleSubmit function of useForm hook
     mutate(data);
   }
 
+  function onInValid(error) {
+    console.log(error);
+  }
+
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
-      <StyledFormRow>
-        <Label htmlFor="name">Cabin Name</Label>
-        <Input id="name" type="text" name="name" {...register("name")} />
-      </StyledFormRow>
-      <StyledFormRow>
-        <Label htmlFor="capacity">Max Capacity</Label>
+    <Form onSubmit={handleSubmit(onValid, onInValid)}>
+      <FormRow label="Cabin Name" error={errors?.name?.message}>
+        <Input
+          id="name"
+          type="text"
+          name="name"
+          {...register("name", {
+            required: "Please provide a name for the cabin",
+          })}
+        />
+      </FormRow>
+      <FormRow
+        label="Max Capacity for Cabin"
+        error={errors?.maxCapacity?.message}
+      >
         <Input
           id="capacity"
           type="number"
           name="maxCapacity"
-          {...register("maxCapacity")}
+          {...register("maxCapacity", {
+            required: "Please select max capacity for the cabin",
+            min: {
+              value: 1,
+              message: "The minimum value should be 1",
+            },
+          })}
         />
-      </StyledFormRow>
-      <StyledFormRow>
-        <Label htmlFor="price">Regular Price</Label>
+      </FormRow>
+      <FormRow
+        label="Regular Price for Cabin"
+        error={errors?.regularPrice?.message}
+      >
         <Input
           id="price"
           type="number"
           name="regularPrice"
-          {...register("regularPrice")}
+          {...register("regularPrice", {
+            required: "Please fill out the regular price for the cabin",
+            min: {
+              value: 1,
+              message: "The minimum value should be 1",
+            },
+          })}
         />
-      </StyledFormRow>
-      <StyledFormRow>
-        <Label htmlFor="discount">Discount</Label>
+      </FormRow>
+      <FormRow label="discount" error={errors?.discount?.message}>
         <Input
           id="discount"
-          type="text"
+          type="number"
           name="discount"
-          {...register("discount")}
+          defaultValue={0}
+          {...register("discount", {
+            required: "Please provide a discount value if available",
+            validate: (value) => {
+              console.log(value);
+              return (
+                Number(value) <= getValues().regularPrice ||
+                "The value should be less than regular price"
+              );
+            },
+          })}
         />
-      </StyledFormRow>
-      <StyledFormRow>
-        <Label htmlFor="description">Description for Cabin</Label>
+      </FormRow>
+      <FormRow label="description" error={errors?.description?.message}>
         <Textarea
           id="description"
           name="description"
-          {...register("description")}
+          {...register("description", {
+            required: "Please enter a small description for the cabin",
+          })}
         />
-      </StyledFormRow>
-      <StyledFormRow>
-        <Label htmlFor="file-input">Image for Cabin</Label>
+      </FormRow>
+      <FormRow label="Choose Image for Cabin">
         <FileInput id="file-input" name="image" {...register("image")} />
-      </StyledFormRow>
-      <StyledFormRow>
+      </FormRow>
+      <FormRow>
         <Button variation="secondary" type="reset">
           Cancel
         </Button>
         <Button disabled={isCreating}>Add Cabin</Button>
-      </StyledFormRow>
+      </FormRow>
     </Form>
   );
 }

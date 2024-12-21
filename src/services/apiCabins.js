@@ -23,7 +23,7 @@ async function createCabin(newCabin) {
   const { data, error } = await supabase
     .from("the_oasis_cabins")
     .insert([newCabin]);
-  if (error) throw new Error("could not add the cabin");
+  if (error) throw new Error("Could not Add the Cabin");
   return data;
 }
 

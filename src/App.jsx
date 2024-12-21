@@ -101,7 +101,7 @@ function App() {
             maxWidth: "400px",
             padding: "16px 24px",
             color: "var(--color-grey-700)",
-            backgroundColor: "var(--color--brand)",
+            backgroundColor: "var(--color-grey-0)",
           },
         }}
       />
