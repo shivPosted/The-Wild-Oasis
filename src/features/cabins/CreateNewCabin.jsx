@@ -30,7 +30,7 @@ function CreateNewCabin() {
 
   function onValid(data) {
     //NOTE: onValid get access to data which is automatically passed by handleSubmit function of useForm hook
-    mutate(data);
+    mutate({ ...data, image: data.image[0] }); //NOTE: for image we only want path but in uploading it we are getting array like Filelist so we have to modify it
   }
 
   function onInValid(error) {
@@ -110,8 +110,15 @@ function CreateNewCabin() {
           })}
         />
       </FormRow>
-      <FormRow label="Choose Image for Cabin">
-        <FileInput id="file-input" name="image" {...register("image")} />
+      <FormRow label="Choose Image for Cabin" error={errors?.image?.message}>
+        <FileInput
+          id="file-input"
+          accept="image/*"
+          name="image"
+          {...register("image", {
+            required: "Please Select an Image for Cabin",
+          })}
+        />
       </FormRow>
       <FormRow>
         <Button variation="secondary" type="reset">
