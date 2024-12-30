@@ -92,7 +92,7 @@ function CreateNewCabin() {
           {...register("discount", {
             required: "Please provide a discount value if available",
             validate: (value) => {
-              console.log(value);
+              //NOTE:: It will return true or udefined if the validation succeeds or false or a string if validation fails
               return (
                 Number(value) <= getValues().regularPrice ||
                 "The value should be less than regular price"

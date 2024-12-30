@@ -1,5 +1,5 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { deleteCabin, getCabins } from "../../services/apiCabins";
+import { useQuery } from "@tanstack/react-query";
+import { getCabins } from "../../services/apiCabins";
 import styled from "styled-components";
 import Spinner from "../../ui/Spinner";
 import CabinRow from "./CabinRow";
@@ -42,7 +42,7 @@ function CabinsTable() {
   return (
     <Table>
       <TableHeader>
-        <div></div>
+        <div>no.</div>
         <div>cabin</div>
         <div>capacity</div>
         <div>price</div>

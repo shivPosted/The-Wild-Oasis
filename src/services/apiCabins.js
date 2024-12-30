@@ -28,7 +28,7 @@ async function createCabin(newCabin) {
     "/",
     "",
   );
-  console.log(imageName);
+
   const imagePath = `${url}/storage/v1/object/public/the_oasis_cabin_images/${imageName}`; //NOTE: this image path because bucket on supabase save image in this form of url
 
   const { error: uploadError } = await supabase.storage
@@ -39,6 +39,7 @@ async function createCabin(newCabin) {
   const { data, error } = await supabase
     .from("the_oasis_cabins")
     .insert([{ ...newCabin, image: imagePath }]);
+
   if (error) throw new Error("Could not Add the Cabin");
   return data;
 }
